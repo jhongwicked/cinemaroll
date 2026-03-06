@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - CINEMAROLL</title>
+
+    <meta name="description" content="Tingnan ang iyong mga paboritong pelikula at TV shows sa CINEMAROLL.">
+    <link href="https://fonts.googleapis.com/css2?family=Saira:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://cinemarollassets.pages.dev/img/cinema-transparent.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="CINEMAROLL">
+    <link rel="apple-touch-icon" href="https://cinemarollassets.pages.dev/img/cinema-transparent.png">
+
+    <style>
+        :root {
+            --primary: #db2b39;
+            --secondary: #29335c;
+            --accent: #f3a712;
+            --bg-dark: #0f1014;
+            --card-bg: #1a1d24;
+            --text-light: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Saira', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        header {
+            background: rgba(15, 16, 20, 0.95);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(243, 167, 18, 0.2);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .back-home {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            background: var(--primary);
+            padding: 8px 18px;
+            border-radius: 25px;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .back-home:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .container {
+            padding: 120px 5% 40px;
+            min-height: 70vh;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.4s;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(219, 43, 57, 0.3);
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 12px;
+            font-size: 14px;
+            text-align: center;
+            background: linear-gradient(to top, #1a1d24, transparent);
+        }
+
+        .remove-fav {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            background: rgba(219, 43, 57, 0.8);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .remove-fav:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* FOOTER */
+        .site-footer {
+            background: #0a0b0d;
+            color: #888;
+            padding: 60px 5% 30px;
+            border-top: 1px solid #1a1c1f;
+            margin-top: 50px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .footer-logo span {
+            color: var(--primary);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            color: #555;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #15171a;
+            font-size: 12px;
+            color: #444;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .logo { font-size: 22px; }
+            .container { padding-top: 100px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index" class="logo">CINEMA<span>ROLL</span></a>
+        <a href="index" class="back-home"><i class="fas fa-home"></i> HOME</a>
+    </header>
+
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">My Favorites</h2>
+            <button class="back-home" style="background:#555" onclick="clearAllFavorites()">CLEAR ALL</button>
+        </div>
+        <div class="results-grid" id="favoritesGrid">
+            </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const POSTER_URL = 'https://image.tmdb.org/t/p/w500';
+
+        function loadFavorites() {
+            const grid = document.getElementById('favoritesGrid');
+            const favs = JSON.parse(localStorage.getItem('cr_favorites') || '[]');
+
+            if (favs.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #555;">
+                    <i class="fas fa-heart-broken" style="font-size: 50px; margin-bottom: 20px;"></i>
+                    <p>Wala ka pang paboritong pelikula. Mag-add gamit ang heart icon!</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = '';
+            favs.forEach(m => {
+                const title = m.title || m.name;
+                const type = m.media_type || (m.title ? 'movie' : 'tv');
+                
+                grid.innerHTML += `
+                    <div class="card" onclick="location.href='play.html?id=${m.id}&type=${type}'">
+                        <button class="remove-fav" onclick="removeFavorite(event, ${m.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <img src="${POSTER_URL + m.poster_path}" alt="${title}">
+                        <div class="card-info"><strong>${title}</strong></div>
+                    </div>`;
+            });
+        }
+
+        function removeFavorite(event, id) {
+            event.stopPropagation();
+            let favs = JSON.parse(localStorage.getItem('cr_favorites') || '[]');
+            favs = favs.filter(f => f.id !== id);
+            localStorage.setItem('cr_favorites', JSON.stringify(favs));
+            loadFavorites();
+        }
+
+        function clearAllFavorites() {
+            if (confirm('Sigurado ka bang gusto mong burahin ang lahat ng Favorites?')) {
+                localStorage.removeItem('cr_favorites');
+                loadFavorites();
+            }
+        }
+
+        // Security Scripts
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        loadFavorites();
+        // 1. Logic para i-load ang Footer file
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                setupPWAInstall(); // I-setup ang install button pagkatapos ma-load ang footer
+            });
+
+        // 2. Progressive Web App Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        // 3. PWA Install Logic
+        let deferredPrompt;
+        function setupPWAInstall() {
+            const installBtn = document.getElementById('installBtn');
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if(installBtn) installBtn.style.display = 'block';
+            });
+
+            if(installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') installBtn.style.display = 'none';
+                        deferredPrompt = null;
+                    }
+                });
+            }
+        }
+
+        // ... Ituloy ang init() at iba pang existing functions mo ...
+    </script>
+</body>
+
+</html>

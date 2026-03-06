@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINEMAROLL - Genre View</title>
+
+    <meta name="description"
+        content="I-explore ang mga pelikula base sa iyong paboritong genre sa CINEMAROLL. HD quality streaming para sa Action, Drama, Comedy, at iba pa.">
+    <meta name="keywords"
+        content="movies by genre, streaming genres, cinema collection, watch movies online, CINEMAROLL">
+    <link rel="canonical" href="https://cinemaroll.pages.dev/genre.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cinemaroll.pages.dev/genre.html">
+    <meta property="og:title" content="Browse Movies by Genre - CINEMAROLL">
+    <meta property="og:description" content="Hanapin ang mga pinakamagandang pelikula sa iyong paboritong kategorya.">
+    <meta property="og:image"
+        content="https://www.creativefabrica.com/wp-content/uploads/2021/10/05/CR-logo-design-vector-Graphics-18353315-1-1-580x386.jpg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Saira:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://cinemarollassets.pages.dev/img/cinema-transparent.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="CINEMAROLL">
+    <link rel="apple-touch-icon" href="https://cinemarollassets.pages.dev/img/cinema-transparent.png">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Movie Genre Collection - CINEMAROLL",
+  "description": "I-explore ang mga pelikula base sa iyong paboritong genre sa CINEMAROLL.",
+  "url": "https://cinemaroll.pages.dev/genre.html",
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://cinemaroll.pages.dev/index.html"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Genre"
+    }]
+  }
+}
+</script>
+    <style>
+        :root {
+            --primary: #db2b39;
+            --secondary: #29335c;
+            --accent: #f3a712;
+            --bg-dark: #0f1014;
+            --card-bg: #1a1d24;
+            --text-light: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Saira', sans-serif;
+            background: var(--bg-dark);
+            color: white;
+            padding: 0;
+            margin: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* HEADER FIX - NO OVERLAP */
+        header {
+            background: rgba(15, 16, 20, 0.95);
+            padding: 0 5%;
+            /* Pantay na padding sa gilid */
+            height: 70px;
+            /* Fixed height para sa desktop */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(243, 167, 18, 0.2);
+            box-sizing: border-box;
+            /* Siguradong kasama ang padding sa width */
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            flex-shrink: 0;
+            /* Hindi mapipiga ang logo */
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            /* Hindi mapipiga ang button */
+        }
+
+        .back-btn:hover {
+            background: var(--accent);
+            color: var(--secondary);
+        }
+
+        .container {
+            padding: 40px 5%;
+            margin-top: 90px;
+            /* Space para sa fixed header */
+        }
+
+        .genre-title {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            text-transform: uppercase;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #player-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-box {
+            width: 90%;
+            max-width: 1000px;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .site-footer {
+            background: #0a0b0d;
+            color: #888;
+            padding: 60px 5% 30px;
+            border-top: 1px solid #1a1c1f;
+            margin-top: 50px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer-logo span {
+            color: var(--primary);
+        }
+
+        .follow-us {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .follow-us span {
+            font-weight: 700;
+            color: #555;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            color: #555;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #15171a;
+            font-size: 12px;
+            color: #444;
+            text-align: left;
+        }
+
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 768px) {
+            header {
+                height: 60px;
+                /* Mas maliit na height sa mobile */
+                padding: 0 5%;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .back-btn {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .container {
+                margin-top: 80px;
+            }
+
+            .genre-title {
+                font-size: 1.5rem;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .card-info {
+                font-size: 12px;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index" class="logo">CINEMA<span>ROLL</span></a>
+        <a href="index" class="back-btn"><i class="fas fa-home"></i> HOME</a>
+    </header>
+
+    <div class="container">
+        <h1 id="genreTitle" class="genre-title">Genre</h1>
+        <div class="movie-grid" id="genreGrid"></div>
+    </div>
+
+    <div id="player-modal">
+        <span class="close-btn" onclick="closePlayer()">&times;</span>
+        <div class="video-box">
+            <iframe id="videoIframe" src="" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const API_KEY = '13a2e3c3497a4d8b8f9a1d449a02a373';
+        const POSTER_URL = 'https://image.tmdb.org/t/p/w500';
+
+        const collectionSchema = {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Movie Genre Collection - CINEMAROLL",
+            "description": "Browse our collection of movies by genre."
+        };
+        const scriptSchema = document.createElement('script');
+        scriptSchema.type = "application/ld+json";
+        scriptSchema.text = JSON.stringify(collectionSchema);
+        document.head.appendChild(scriptSchema);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const genreId = urlParams.get('id');
+        const genreName = urlParams.get('name');
+
+        document.getElementById('genreTitle').innerText = genreName || 'Movies';
+
+        async function fetchGenreMovies() {
+            const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`);
+            const data = await res.json();
+            const grid = document.getElementById('genreGrid');
+
+            data.results.forEach(m => {
+                if (!m.poster_path) return;
+                const movieTitle = m.title;
+                grid.innerHTML += `
+            <div class="card" onclick="goToPlay('${m.id}', 'movie')">
+                <img src="${POSTER_URL + m.poster_path}" alt="${movieTitle} Poster - CINEMAROLL" loading="lazy">
+                <div class="card-info"><strong>${movieTitle}</strong></div>
+            </div>`;
+            });
+        }
+
+        function slugifyTitle(text, id) {
+            let slug = text.toString().toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-') // palitan ang special chars ng hyphen
+                .replace(/^-+|-+$/g, '');    // tanggalin ang hyphens sa dulo
+
+            slug = slug.substring(0, 50).replace(/-+$/, ''); // limit sa 50 chars
+            if (!slug) slug = 'movie';
+
+            return `${slug}-${id}.html`;
+        }
+
+        // Bagong goToPlay function na naka-redirect sa static files
+        function goToPlay(id, type, title) {
+            if (type === 'movie') {
+                const fileName = slugifyTitle(title, id);
+                // Ire-redirect sa static PBN page na nasa 'watch' folder
+                window.location.href = `watch/${fileName}`;
+            } else {
+                // Fallback para sa TV Shows (kung hindi sila kasama sa generator mo)
+                window.location.href = `play.html?id=${id}&type=${type}`;
+            }
+        }
+
+        function closePlayer() {
+            document.getElementById('videoIframe').src = '';
+            document.getElementById('player-modal').style.display = 'none';
+        }
+
+        if (genreId) fetchGenreMovies();
+
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        }, false);
+
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
+        };
+        // 1. Logic para i-load ang Footer file
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                setupPWAInstall(); // I-setup ang install button pagkatapos ma-load ang footer
+            });
+
+        // 2. Progressive Web App Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        // 3. PWA Install Logic
+        let deferredPrompt;
+        function setupPWAInstall() {
+            const installBtn = document.getElementById('installBtn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installBtn) installBtn.style.display = 'block';
+            });
+
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') installBtn.style.display = 'none';
+                        deferredPrompt = null;
+                    }
+                });
+            }
+        }
+
+        // ... Ituloy ang init() at iba pang existing functions mo ...
+    </script>
+</body>
+
+</html>
