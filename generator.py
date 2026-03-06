@@ -22,6 +22,17 @@ TARGETS = [
 CURRENT_INDEX_DB = []
 
 
+def ping_pingomatic(site_name, site_url):
+    """Nagpapadala ng ping sa Ping-o-matic para mabilis ma-index"""
+    print(f"    📡 Pinging Ping-o-matic for {site_name}...")
+    try:
+        server = xmlrpc.client.ServerProxy("http://rpc.pingomatic.com/")
+        server.weblogUpdates.ping(site_name, site_url)
+        print("    ✅ Ping successful!")
+    except Exception as e:
+        print(f"    ❌ Ping failed: {e}")
+
+
 # --- HELPER FUNCTIONS ---
 def slugify(text, item_id=""):
     text = str(text).lower()
@@ -199,14 +210,3 @@ if __name__ == "__main__":
     else:
         print("❌ Walang nakuha sa API. Aborting.")
     print(f"\n🎉 All tasks completed in {round(time.time() - start_time, 2)} seconds.")
-
-
-def ping_pingomatic(site_name, site_url):
-    """Nagpapadala ng ping sa Ping-o-matic para mabilis ma-index"""
-    print(f"    📡 Pinging Ping-o-matic for {site_name}...")
-    try:
-        server = xmlrpc.client.ServerProxy("http://rpc.pingomatic.com/")
-        server.weblogUpdates.ping(site_name, site_url)
-        print("    ✅ Ping successful!")
-    except Exception as e:
-        print(f"    ❌ Ping failed: {e}")
