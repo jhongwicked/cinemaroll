@@ -1,0 +1,41 @@
+name: Auto Update PBN Content
+
+on:
+  # Tatakbo ito araw-araw tuwing 12:00 AM (UTC)
+  schedule:
+    - cron: "0 0 * * *"
+
+  # Ito ay para ma-click mo ang "Run workflow" button manually sa GitHub
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Generator Script
+        run: python generator.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add .
+          git commit -m "Auto-generated new PBN content" -a || echo "No new content to commit"
+          git push
