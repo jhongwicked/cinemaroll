@@ -4,4 +4,4 @@ User-agent: AhrefsBot
 Disallow: /
 User-agent: SemrushBot
 Disallow: /
-Sitemap: https://iyong-pbn-site.com/sitemap.xml
+Sitemap: https://cinemaroll.pages.dev/sitemap.xml

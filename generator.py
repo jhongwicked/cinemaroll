@@ -11,7 +11,7 @@ PAGES_TO_FETCH = 2
 # [MULTI-CLUSTER PBN CONFIGURATION]
 TARGETS = [
     {
-        "domain": "https://iyong-pbn-site.com",  # Palitan ng domain ng PBN mo
+        "domain": "https://cinemaroll.pages.dev",  # Palitan ng domain ng PBN mo
         "path": ".",  # Folder kung saan mase-save ang files (ginawa kong "." para sa root folder mo muna, o palitan ng "./pbn_output")
         "authority_url": "https://cinemaroll.pages.dev",  # Iyong Money Site
     }
