@@ -1,4 +1,5 @@
 import requests, os, re, time, json
+import xmlrpc.client
 
 # --- GLOBAL CONFIGURATION ---
 TMDB_API_KEY = "13a2e3c3497a4d8b8f9a1d449a02a373"
@@ -185,6 +186,9 @@ def process_targets(movies):
             f"   🔍 Generated search_index.json with {len(CURRENT_INDEX_DB)} entries."
         )
 
+        # --- 4. AWTOMATIKONG MAG-PING SA PING-O-MATIC ---
+        ping_pingomatic("CINEMAROLL PBN", domain)
+
 
 if __name__ == "__main__":
     print("🎬 Starting CINEMAROLL PBN Generator...")
@@ -195,3 +199,14 @@ if __name__ == "__main__":
     else:
         print("❌ Walang nakuha sa API. Aborting.")
     print(f"\n🎉 All tasks completed in {round(time.time() - start_time, 2)} seconds.")
+
+
+def ping_pingomatic(site_name, site_url):
+    """Nagpapadala ng ping sa Ping-o-matic para mabilis ma-index"""
+    print(f"    📡 Pinging Ping-o-matic for {site_name}...")
+    try:
+        server = xmlrpc.client.ServerProxy("http://rpc.pingomatic.com/")
+        server.weblogUpdates.ping(site_name, site_url)
+        print("    ✅ Ping successful!")
+    except Exception as e:
+        print(f"    ❌ Ping failed: {e}")
