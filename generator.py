@@ -7,7 +7,7 @@ API_BASE = "https://api.themoviedb.org/3"
 POSTER_BASE = "https://image.tmdb.org/t/p/w500"
 
 # Ilang pahina ng Trending Movies ang kukunin (20 movies per page)
-PAGES_TO_FETCH = 2
+PAGES_TO_FETCH = 100
 
 # [MULTI-CLUSTER PBN CONFIGURATION]
 TARGETS = [
