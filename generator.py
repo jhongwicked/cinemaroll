@@ -83,6 +83,33 @@ def generate_robots_txt(target_path, site_domain):
         f.write(content)
 
 
+def inject_links_to_index(target_path, movies, domain):
+    print("    🔗 Injecting static links to index.html for SEO...")
+    index_path = os.path.join(target_path, "index.html")
+
+    if not os.path.exists(index_path):
+        print("    ⚠️ index.html not found. Skipping link injection.")
+        return
+
+    with open(index_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    # Bumuo ng HTML links para sa mga pelikula
+    links_html = "\n"
+    for movie in movies[:50]:  # Ilagay lang ang pinakabagong 50 links para hindi spammy
+        title = movie.get("title", "Untitled")
+        m_id = movie.get("id")
+        slug = slugify(title, m_id)
+        links_html += f'<a href="watch/{slug}.html" style="color: #888; text-decoration: none; font-size: 12px; background: #1a1d24; padding: 5px 10px; border-radius: 3px;">Watch {safe_str(title)}</a>\n'
+    links_html += ""
+
+    # I-replace ang lumang content gamit ang regex
+    new_html = re.sub(r".*?", links_html, html_content, flags=re.DOTALL)
+
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(new_html)
+
+
 # --- CORE LOGIC ---
 def fetch_movies_from_tmdb():
     movies_list = []
@@ -197,7 +224,10 @@ def process_targets(movies):
             f"   🔍 Generated search_index.json with {len(CURRENT_INDEX_DB)} entries."
         )
 
-        # --- 4. AWTOMATIKONG MAG-PING SA PING-O-MATIC ---
+        # --- 4. INJECT LINKS TO INDEX.HTML ---
+        inject_links_to_index(root_path, movies, domain)
+
+        # --- 5. AWTOMATIKONG MAG-PING SA PING-O-MATIC ---
         ping_pingomatic("CINEMAROLL PBN", domain)
 
 
