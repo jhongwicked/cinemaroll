@@ -1,5 +1,4 @@
 from turtle import title
-
 import google.generativeai as genai
 import os
 import time
@@ -13,7 +12,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
     # Gagamitin natin ang flash model dahil mabilis at libre
-    ai_model = genai.GenerativeModel("gemini-1.5-flash")
+    ai_model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 
 def generate_unique_synopsis(title, original_overview):
@@ -127,11 +126,17 @@ def inject_links_to_index(target_path, movies, domain):
 
     # Bumuo ng HTML links para sa mga pelikula
     links_html = "\n"
-    for movie in movies[:50]:  # Ilagay lang ang pinakabagong 50 links para hindi spammy
+    for movie in movies[:50]:
         title = movie.get("title", "Untitled")
         m_id = movie.get("id")
         slug = slugify(title, m_id)
-        links_html += f'<a href="watch/{slug}.html" style="color: #888; text-decoration: none; font-size: 12px; background: #1a1d24; padding: 5px 10px; border-radius: 3px;">Watch {safe_str(title)}</a>\n'
+
+        # Inalis ang safe_str() at pinalitan ng mas simpleng text cleaner
+        clean_title = (
+            title.replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
+        )
+
+        links_html += f'<a href="watch/{slug}.html" style="color: #888; text-decoration: none; font-size: 12px; background: #1a1d24; padding: 5px 10px; border-radius: 3px;">Watch {clean_title}</a>\n'
     links_html += ""
 
     # I-replace ang lumang content gamit ang regex
@@ -195,7 +200,9 @@ def process_targets(movies):
 
             try:
                 # Kunin ang original, tapos ipa-rewrite sa AI
-                raw_overview = movie.get("overview", "Stream this premium movie in HD quality online.")
+                raw_overview = movie.get(
+                    "overview", "Stream this premium movie in HD quality online."
+                )
                 overview = generate_unique_synopsis(title, raw_overview)
                 print(f"    ✨ AI Generated unique content for: {title}")
                 rating = round(movie.get("vote_average", 0), 1)
