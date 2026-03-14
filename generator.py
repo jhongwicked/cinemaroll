@@ -1,8 +1,39 @@
+from turtle import title
+
+import google.generativeai as genai
+import os
+import time
 import requests, os, re, time, json
 import xmlrpc.client
 
 # --- GLOBAL CONFIGURATION ---
 TMDB_API_KEY = "13a2e3c3497a4d8b8f9a1d449a02a373"
+# --- AI CONTENT SPINNER SETUP ---
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    # Gagamitin natin ang flash model dahil mabilis at libre
+    ai_model = genai.GenerativeModel("gemini-1.5-flash")
+
+
+def generate_unique_synopsis(title, original_overview):
+    """Pinapasulat sa AI ang unique SEO description para iwas Duplicate Penalty"""
+    if not GEMINI_API_KEY:
+        return original_overview  # Babalik sa original kung walang API key
+
+    prompt = f"Write a unique, engaging, and SEO-friendly 100-word movie review and synopsis for the movie '{title}'. Here is the original plot: {original_overview}. Do not use the exact phrasing. Make it sound like a movie critic recommending it for streaming."
+
+    try:
+        response = ai_model.generate_content(prompt)
+        time.sleep(
+            2
+        )  # Anti-rate limit (para hindi ma-block ng Google ang libreng API mo)
+        return response.text.strip()
+    except Exception as e:
+        print(f"    ⚠️ AI Rewrite failed for {title}: {e}")
+        return original_overview  # Babalik sa original kung nagka-error ang AI
+
+
 API_BASE = "https://api.themoviedb.org/3"
 POSTER_BASE = "https://image.tmdb.org/t/p/w500"
 
@@ -163,10 +194,10 @@ def process_targets(movies):
             canonical_url = f"{domain}/watch/{slug}.html"
 
             try:
-                # Prepare data
-                overview = movie.get(
-                    "overview", "Stream this premium movie in HD quality online."
-                )
+                # Kunin ang original, tapos ipa-rewrite sa AI
+                raw_overview = movie.get("overview", "Stream this premium movie in HD quality online.")
+                overview = generate_unique_synopsis(title, raw_overview)
+                print(f"    ✨ AI Generated unique content for: {title}")
                 rating = round(movie.get("vote_average", 0), 1)
                 year = movie.get("release_date", "2025").split("-")[0]
                 poster_url = f"{POSTER_BASE}{movie.get('poster_path')}"
